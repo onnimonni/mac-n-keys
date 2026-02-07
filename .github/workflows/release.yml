@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: macos-26
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build release binaries
+        run: swift build -c release
+
+      - name: Build PAM module
+        run: make -C pam
+
+      - name: Create tarball
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          mkdir -p dist
+          cp .build/release/mac-n-keys dist/
+          cp .build/release/age-plugin-se dist/
+          cp pam/pam_mac_n_keys.so dist/
+          tar -czf "mac-n-keys-${VERSION}-arm64-macos.tar.gz" -C dist .
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          gh release create "$VERSION" \
+            "mac-n-keys-${VERSION}-arm64-macos.tar.gz" \
+            --title "$VERSION" \
+            --generate-notes

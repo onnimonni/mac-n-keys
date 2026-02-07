@@ -1,0 +1,7 @@
+.build/
+secretive/
+age-plugin-se/
+apw/
+*.o
+*.so
+.DS_Store

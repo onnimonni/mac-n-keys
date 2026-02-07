@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (debug)
+        run: swift build
+
+      - name: Test
+        run: swift test
+
+      - name: Build (release)
+        run: swift build -c release
+
+      - name: Upload mac-n-keys binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-n-keys
+          path: .build/release/mac-n-keys
+
+      - name: Upload age-plugin-se binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: age-plugin-se
+          path: .build/release/age-plugin-se
