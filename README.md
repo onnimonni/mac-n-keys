@@ -2,6 +2,9 @@
   <img src="assets/logo.png" alt="mac-n-keys logo" width="500">
 </p>
 
+> [!WARNING]
+> This was vibe coded with Claude and reviewed with Gemini. Use with caution!
+
 # mac-n-keys
 
 Unified macOS secrets management with Secure Enclave and Touch ID.
@@ -16,6 +19,12 @@ macOS has great hardware security (Secure Enclave, Touch ID) but fragmented tool
 - **age-plugin-se** — AGE keys only, poor observability in Touch ID prompts
 - **apw** — Passwords.app access via TypeScript, no Touch ID gating
 - **pam_tid.so** — sudo via Touch ID, but the prompt just says "sudo" with no context
+
+<p align="center">
+  <img src="assets/just-sudo.png" alt="Generic sudo Touch ID prompt with no context" width="300">
+  <br>
+  <em>Current state: Touch ID just says "sudo" — no idea what command is being run</em>
+</p>
 
 `mac-n-keys` fixes this by:
 1. Showing the **calling process** (name + pid) in every Touch ID prompt
